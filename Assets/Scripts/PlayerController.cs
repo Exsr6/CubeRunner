@@ -95,7 +95,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(crouchKey))
         {
             transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-            rb.AddForce(Vector3.down * 2f, ForceMode.Impulse);
+            if (bIsGrounded) 
+            {
+                rb.AddForce(Vector3.down * 2f, ForceMode.Impulse);
+            }
         }
 
         if (Input.GetKeyUp(crouchKey)) {
