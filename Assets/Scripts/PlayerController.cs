@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements.Experimental;
 
-public class PlayerController : MonoBehaviour
-{
+public class PlayerController : MonoBehaviour {
     float MovementX;
     float MovementY;
     Vector3 moveDirection;
@@ -13,7 +13,15 @@ public class PlayerController : MonoBehaviour
     public float walkSpeed;
     public float sprintSpeed;
     public float crouchSpeed;
+    public float dashSpeed;
     public float groundDrag;
+
+    private float dashCooldown = 2f;
+    private float dashTimer = 1f;
+    private Vector3 dashDirection;
+    bool isDashing = false;
+    bool canDash = true;
+
 
     [Header("Jumping")]
     public float jumpforce;
@@ -30,6 +38,7 @@ public class PlayerController : MonoBehaviour
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode sprintKey = KeyCode.LeftShift;
     public KeyCode crouchKey = KeyCode.LeftControl;
+    public KeyCode dashKey = KeyCode.Mouse1;
 
     [Header("Ground Check")]
     public float playerHeight;
@@ -38,6 +47,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("References")]
     public Transform orientation;
+    public Transform playerCamera;
     Rigidbody rb;
 
     public MovementState state;
@@ -45,12 +55,12 @@ public class PlayerController : MonoBehaviour
         walking,
         sprinting,
         crouching,
+        dashing,
         air
     }
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
@@ -58,8 +68,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         bIsGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, isGround);
 
         PlayerInput();
@@ -74,8 +83,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
+    private void FixedUpdate() {
         MovePlayer();
     }
 
@@ -83,8 +91,7 @@ public class PlayerController : MonoBehaviour
         MovementX = Input.GetAxisRaw("Horizontal");
         MovementY = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKey(jumpKey) && readyToJump && bIsGrounded)
-        { 
+        if (Input.GetKey(jumpKey) && readyToJump && bIsGrounded) {
             readyToJump = false;
 
             Jump();
@@ -92,11 +99,9 @@ public class PlayerController : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCooldown);
         }
 
-        if (Input.GetKey(crouchKey))
-        {
+        if (Input.GetKey(crouchKey)) {
             transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-            if (bIsGrounded) 
-            {
+            if (bIsGrounded) {
                 rb.AddForce(Vector3.down * 2f, ForceMode.Impulse);
             }
         }
@@ -112,6 +117,13 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(crouchKey)) {
             state = MovementState.crouching;
             movementSpeed = crouchSpeed;
+        }
+
+        // State - Dashing
+        else if (Input.GetKey(dashKey) && canDash && !isDashing) {
+            state = MovementState.dashing;
+
+            StartCoroutine(Dash());
         }
 
         // State - Sprinting
@@ -132,17 +144,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void MovePlayer()
-    {
+    void MovePlayer() {
         moveDirection = orientation.forward * MovementY + orientation.right * MovementX;
 
         if (bIsGrounded) {
             rb.AddForce(moveDirection.normalized * movementSpeed * 10f, ForceMode.Force);
         }
         else if (!bIsGrounded) {
-            rb.AddForce(moveDirection.normalized * movementSpeed * 10f* airMultiplier, ForceMode.Force);
+            rb.AddForce(moveDirection.normalized * movementSpeed * 10f * airMultiplier, ForceMode.Force);
         }
     }
+
 
     private void SpeedControl() {
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
@@ -151,6 +163,26 @@ public class PlayerController : MonoBehaviour
             Vector3 limitedVel = flatVel.normalized * movementSpeed;
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
+    }
+
+    private IEnumerator Dash() {
+        isDashing = true;
+        canDash = false;
+        if (isDashing) {
+
+            
+            dashDirection = playerCamera.forward;
+            dashDirection.y = Mathf.Clamp(dashDirection.y, -0.5f, 0.5f);
+
+            dashDirection = dashDirection.normalized;
+
+            rb.AddForce(dashDirection * dashSpeed, ForceMode.Impulse);
+            
+        }
+        yield return new WaitForSeconds(dashTimer);
+        isDashing = false;
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
     }
 
     private void Jump() {

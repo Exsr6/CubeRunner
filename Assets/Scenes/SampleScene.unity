@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 74405934}
   m_Layer: 0
   m_Name: Wall (1)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -457,7 +457,7 @@ GameObject:
   - component: {fileID: 294090212}
   m_Layer: 0
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -822,7 +822,7 @@ GameObject:
   - component: {fileID: 709736037}
   m_Layer: 0
   m_Name: Wall (3)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -927,7 +927,7 @@ GameObject:
   - component: {fileID: 838325648}
   m_Layer: 0
   m_Name: Wall (2)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1107,7 +1107,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1386304766}
   m_Father: {fileID: 1483975946}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1139,7 +1140,7 @@ GameObject:
   - component: {fileID: 1002390324}
   m_Layer: 6
   m_Name: Platform (1)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1264,6 +1265,7 @@ MonoBehaviour:
   walkSpeed: 7
   sprintSpeed: 10
   crouchSpeed: 3.5
+  dashSpeed: 20
   groundDrag: 5
   jumpforce: 8
   jumpCooldown: 0.25
@@ -1272,11 +1274,13 @@ MonoBehaviour:
   jumpKey: 32
   sprintKey: 304
   crouchKey: 306
+  dashKey: 324
   playerHeight: 2
   isGround:
     serializedVersion: 2
     m_Bits: 64
   orientation: {fileID: 582372946}
+  playerCamera: {fileID: 963194228}
   state: 0
 --- !u!54 &1187956239
 Rigidbody:
@@ -1335,13 +1339,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2d260f3e073b3542901e1e4e9e71321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireRate: 15
-  damage: 0
-  bulletDistance: 0
-  magazineSize: 0
-  fireKey: 101
-  bulletPrefab: {fileID: 0}
-  cameraPosition: {fileID: 0}
+  bulletPrefab: {fileID: 1889949017341388276, guid: 156528af1dc111d4daa630c7909694aa, type: 3}
+  firePoint: {fileID: 1386304766}
+  bulletSpeed: 20
+  fireRate: 0.5
 --- !u!1 &1231220618
 GameObject:
   m_ObjectHideFlags: 0
@@ -1495,6 +1496,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1386304765
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1386304766}
+  m_Layer: 0
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1386304766
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1386304765}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.017, y: 0, z: 0.694}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 963194228}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1483975945
 GameObject:
   m_ObjectHideFlags: 0
@@ -1520,7 +1552,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1483975945}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 22.65, y: -5.064, z: 1.66}
+  m_LocalPosition: {x: 0, y: 1.604, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1555,7 +1587,7 @@ GameObject:
   - component: {fileID: 1550973730}
   m_Layer: 6
   m_Name: Platform (3)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1660,7 +1692,7 @@ GameObject:
   - component: {fileID: 1558212755}
   m_Layer: 6
   m_Name: Platform (2)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1902,7 +1934,7 @@ GameObject:
   - component: {fileID: 1764276189}
   m_Layer: 6
   m_Name: Platform
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2007,7 +2039,7 @@ GameObject:
   - component: {fileID: 1843284253}
   m_Layer: 6
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2113,7 +2145,7 @@ GameObject:
   - component: {fileID: 1953809967}
   m_Layer: 6
   m_Name: Platform (4)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

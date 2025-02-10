@@ -4,35 +4,31 @@ using UnityEngine;
 
 public class WeaponSystem : MonoBehaviour {
 
-    [Header("Properties")]
-    public float fireRate;
-    public float damage;
-    public float bulletDistance;
+    public GameObject bulletPrefab; // Assign your bullet prefab in the Inspector
+    public Transform firePoint; // Assign a GameObject (like an empty GameObject) at the gun's muzzle
+    public float bulletSpeed = 20f;
+    public float fireRate = 0.2f; // Time between shots
 
-    public int magazineSize;
-    private int bulletsRemaining;
+    private float nextFireTime = 0f;
 
-    bool isAutomatic;
-
-    [Header("Keybinds")]
-    public KeyCode fireKey = KeyCode.Mouse0;
-
-    [Header("References")]
-    public GameObject bulletPrefab;
-    public Transform cameraPosition;
-
-    // Start is called before the first frame update
-    void Start() {
-
-    }
-
-    // Update is called once per frame
     void Update() {
-        
+        if (Input.GetButton("Fire1")) {
+            Debug.Log("Time.time: " + Time.time + " | nextShootTime: " + nextFireTime);
+
+            if (Time.time >= nextFireTime) {
+                Shoot();
+                nextFireTime = Time.time + fireRate;
+                Debug.Log("Shot fired! Next shoot time: " + nextFireTime);
+            }
+        }
     }
 
-    private void Fire()
-    {
-        
+    void Shoot() {
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        Rigidbody rb = bullet.GetComponent<Rigidbody>();
+        if (rb != null) {
+            rb.velocity = firePoint.forward * bulletSpeed;
+        }
+        Destroy(bullet, 5f); // Destroy bullet after 5 seconds
     }
 }
