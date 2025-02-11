@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour {
     Vector3 moveDirection;
 
     [Header("Movement")]
-    private float movementSpeed;
+    public float movementSpeed;
     public float walkSpeed;
     public float sprintSpeed;
     public float crouchSpeed;
@@ -53,7 +53,6 @@ public class PlayerController : MonoBehaviour {
     public MovementState state;
     public enum MovementState {
         walking,
-        sprinting,
         crouching,
         dashing,
         air
@@ -114,32 +113,30 @@ public class PlayerController : MonoBehaviour {
     private void StateHandler() {
 
         // State - Crouching
-        if (Input.GetKey(crouchKey)) {
+        if (Input.GetKey(crouchKey))
+        {
             state = MovementState.crouching;
             movementSpeed = crouchSpeed;
         }
 
         // State - Dashing
-        else if (Input.GetKey(dashKey) && canDash && !isDashing) {
+        else if (Input.GetKey(dashKey) && canDash && !isDashing)
+        {
             state = MovementState.dashing;
 
             StartCoroutine(Dash());
         }
 
-        // State - Sprinting
-        else if (bIsGrounded && Input.GetKey(sprintKey)) {
-            state = MovementState.sprinting;
-            movementSpeed = sprintSpeed;
-        }
-
         // State - Walking
-        else if (bIsGrounded) {
+        else if (bIsGrounded)
+        {
             state = MovementState.walking;
-            movementSpeed = walkSpeed;
+
         }
 
         // State - Air
-        else {
+        else
+        {
             state = MovementState.air;
         }
     }
