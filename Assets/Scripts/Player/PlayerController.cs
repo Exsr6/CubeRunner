@@ -4,24 +4,27 @@ using UnityEngine;
 using UnityEngine.UIElements.Experimental;
 
 public class PlayerController : MonoBehaviour {
+
+    [Header("Variables")]
     float MovementX;
     float MovementY;
     Vector3 moveDirection;
+
+    [Header("References")]
+    public Transform orientation;
+    public Transform playerCamera;
+    Rigidbody rb;
+    private ParticleSystem speedParticles;
 
     [Header("Movement")]
     public float movementSpeed;
     public float walkSpeed;
     public float sprintSpeed;
-    public float crouchSpeed;
     public float dashSpeed;
     public float groundDrag;
 
-    private float dashCooldown = 2f;
-    private float dashTimer = 1f;
-    private Vector3 dashDirection;
-    bool isDashing = false;
-    bool canDash = true;
-
+    public bool dashing;
+    public bool sliding;
 
     [Header("Jumping")]
     public float jumpforce;
@@ -29,31 +32,27 @@ public class PlayerController : MonoBehaviour {
     public float airMultiplier;
     bool readyToJump = true;
 
-    [Header("Crouching")]
-    public float crouchYScale;
-    private float startYScale;
-
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
-    public KeyCode sprintKey = KeyCode.LeftShift;
     public KeyCode crouchKey = KeyCode.LeftControl;
-    public KeyCode dashKey = KeyCode.Mouse1;
+
+    [Header("Slope Check")]
+    public float maxSlopeAngle;
+    private RaycastHit slopeHit;
 
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask isGround;
-    bool bIsGrounded;
-
-    [Header("References")]
-    public Transform orientation;
-    public Transform playerCamera;
-    Rigidbody rb;
+    public bool bIsGrounded;
+    public LayerMask isWater;
+    bool bIsWater;
 
     public MovementState state;
     public enum MovementState {
         walking,
-        crouching,
+        sprinting,
+        sliding,
         dashing,
         air
     }
@@ -63,18 +62,19 @@ public class PlayerController : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
-        startYScale = transform.localScale.y;
+        speedParticles = GameObject.Find("SpeedParticles").GetComponent<ParticleSystem>();
     }
 
     // Update is called once per frame
     void Update() {
         bIsGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, isGround);
+        bIsWater = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, isWater);
 
         PlayerInput();
         SpeedControl();
         StateHandler();
 
-        if (bIsGrounded) {
+        if (state == MovementState.walking || state == MovementState.sprinting) {
             rb.drag = groundDrag;
         }
         else {
@@ -84,54 +84,45 @@ public class PlayerController : MonoBehaviour {
 
     private void FixedUpdate() {
         MovePlayer();
+        sParticles();
     }
 
     void PlayerInput() {
         MovementX = Input.GetAxisRaw("Horizontal");
         MovementY = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKey(jumpKey) && readyToJump && bIsGrounded) {
+        if (Input.GetKey(jumpKey) && readyToJump && (bIsGrounded || bIsWater)) {
             readyToJump = false;
 
             Jump();
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
-
-        if (Input.GetKey(crouchKey)) {
-            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-            if (bIsGrounded) {
-                rb.AddForce(Vector3.down * 2f, ForceMode.Impulse);
-            }
-        }
-
-        if (Input.GetKeyUp(crouchKey)) {
-            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
-        }
     }
 
     private void StateHandler() {
 
-        // State - Crouching
-        if (Input.GetKey(crouchKey))
-        {
-            state = MovementState.crouching;
-            movementSpeed = crouchSpeed;
-        }
-
         // State - Dashing
-        else if (Input.GetKey(dashKey) && canDash && !isDashing)
-        {
+        if (dashing) {
             state = MovementState.dashing;
-
-            StartCoroutine(Dash());
+            movementSpeed = dashSpeed;
         }
 
+        else if (sliding) {
+            state = MovementState.sliding;
+            movementSpeed = sprintSpeed;
+        }
+        
         // State - Walking
         else if (bIsGrounded)
         {
             state = MovementState.walking;
+            movementSpeed = walkSpeed;
+        }
 
+        else if (bIsWater) {
+            state = MovementState.sprinting;
+            movementSpeed = sprintSpeed;
         }
 
         // State - Air
@@ -144,12 +135,22 @@ public class PlayerController : MonoBehaviour {
     void MovePlayer() {
         moveDirection = orientation.forward * MovementY + orientation.right * MovementX;
 
+        if (OnSlope()) {
+            rb.AddForce(GetSlopeMoveDirection() * movementSpeed * 20f ,ForceMode.Force);
+
+            if (rb.velocity.y > 0) {
+                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+            }
+        }
+
         if (bIsGrounded) {
             rb.AddForce(moveDirection.normalized * movementSpeed * 10f, ForceMode.Force);
         }
         else if (!bIsGrounded) {
             rb.AddForce(moveDirection.normalized * movementSpeed * 10f * airMultiplier, ForceMode.Force);
         }
+
+        rb.useGravity = !OnSlope();
     }
 
 
@@ -162,27 +163,7 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    private IEnumerator Dash() {
-        isDashing = true;
-        canDash = false;
-        if (isDashing) {
-
-            
-            dashDirection = playerCamera.forward;
-            dashDirection.y = Mathf.Clamp(dashDirection.y, -0.5f, 0.5f);
-
-            dashDirection = dashDirection.normalized;
-
-            rb.AddForce(dashDirection * dashSpeed, ForceMode.Impulse);
-            
-        }
-        yield return new WaitForSeconds(dashTimer);
-        isDashing = false;
-        yield return new WaitForSeconds(dashCooldown);
-        canDash = true;
-    }
-
-    private void Jump() {
+    public void Jump() {
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         rb.AddForce(transform.up * jumpforce, ForceMode.Impulse);
@@ -191,4 +172,27 @@ public class PlayerController : MonoBehaviour {
     private void ResetJump() {
         readyToJump = true;
     }
+
+    private void sParticles() {
+        if (movementSpeed > 7) {
+            speedParticles.Play();
+        }
+        else {
+            speedParticles.Stop();
+        }
+    }
+
+    private bool OnSlope() {
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.1f)) {
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+            return angle < maxSlopeAngle && angle != 0;
+        }
+
+        return false;
+    }
+
+    private Vector3 GetSlopeMoveDirection() {
+        return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
+    }
+
 }

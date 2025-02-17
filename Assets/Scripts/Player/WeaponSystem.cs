@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class WeaponSystem : MonoBehaviour {
 
-    public GameObject bulletPrefab; // Assign your bullet prefab in the Inspector
-    public Transform firePoint; // Assign a GameObject (like an empty GameObject) at the gun's muzzle
-    public float bulletSpeed = 100f;
-    public float fireRate = 0.2f; // Time between shots
+    [Header("References")]
+    public GameObject bulletPrefab;
+    public Transform firePoint;
 
+    [Header("Variables")]
+    public float bulletSpeed = 100f;
+    public float fireRate = 0.2f;
     private float nextFireTime = 0f;
 
     void Update() {

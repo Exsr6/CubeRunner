@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] private float sens = 1000f;
+    [SerializeField] private float sens = 500f;
 
     public Transform orientation;
 
