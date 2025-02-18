@@ -87,11 +87,9 @@ public class AbilitySystem : MonoBehaviour
 
     // DOUBLE JUMP
     private void dJump() {
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        //rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-
-        pc.movementSpeed = pc.sprintSpeed;
+        rb.AddForce(transform.up * pc.jumpforce, ForceMode.Impulse);
 
         hasDoubleJump = false;
         cAbility = currentAbility.None;
@@ -110,7 +108,7 @@ public class AbilitySystem : MonoBehaviour
 
         rb.velocity = Vector3.zero;
 
-        Invoke(nameof(DelayedJumpForce), 0.025f);
+        Invoke(nameof(DelayedDashForce), 0.025f);
 
         Invoke(nameof(StopDash), dashDuration);
 
@@ -120,7 +118,7 @@ public class AbilitySystem : MonoBehaviour
 
     }
 
-    private void DelayedJumpForce() {
+    private void DelayedDashForce() {
         rb.AddForce(delayedForceToApply, ForceMode.Impulse);
     }
 
@@ -145,7 +143,7 @@ public class AbilitySystem : MonoBehaviour
     }
 
     private void DelayedSlideForce() {
-        rb.AddForce(playerCamera.forward * slideForce, ForceMode.Impulse);
+        rb.AddForce(playerCamera.forward * slideForce, ForceMode.VelocityChange);
     }
 
     private void StopSliding() {
