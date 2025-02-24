@@ -17,7 +17,7 @@ public class UniqueTrait : MonoBehaviour
         pc = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
-    private void OnCollisionEnter(Collision other) {
+    private void OnTriggerEnter(Collider other) {
         if (other.transform.CompareTag("Player") && isSphere) {
             self.TakeDamage(1);
             pc.Jump();

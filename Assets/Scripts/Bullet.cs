@@ -10,12 +10,17 @@ public class Bullet : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
         if (collision.gameObject.TryGetComponent<EnemyController>(out EnemyController enemyComponent)) {
             enemyComponent.TakeDamage(1);
             Destroy(gameObject);
         }
     }
 
+    private void OnTriggerEnter(Collider other) {
+        if (other.gameObject.TryGetComponent<EnemyController>(out EnemyController enemyComponent)) {
+            enemyComponent.TakeDamage(1);
+            Destroy(gameObject);
+        }
+    }
 
 }
