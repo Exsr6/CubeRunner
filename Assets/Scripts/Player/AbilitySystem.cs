@@ -14,7 +14,7 @@ public class AbilitySystem : MonoBehaviour
 
     [Header("DoubleJump")]
     public bool hasDoubleJump = false;
-    [SerializeField] private float jumpForce = 9;
+    [SerializeField] private float jumpForce = 12;
 
     [Header("Dash")]
     public bool hasDash = false;
@@ -59,37 +59,71 @@ public class AbilitySystem : MonoBehaviour
     }
 
     private void AbilityHandler() {
-        if (cAbility == currentAbility.Double && hasDoubleJump && Input.GetKey(abilityKey))
-        {
-            dJump();
-        }
 
-        if (cAbility == currentAbility.Dash && hasDash && Input.GetKey(abilityKey)) 
+        switch (cAbility)
         {
-            Dash();
-        }
+            case currentAbility.Double:
+                if (hasDoubleJump && Input.GetKey(abilityKey))
+                {
+                    dJump();
+                }
+                break;
 
-        if (cAbility == currentAbility.Slide && hasSlide && Input.GetKey(abilityKey) && pc.bIsGrounded) 
-        {
-            Slide();
-        }
+            case currentAbility.Dash:
+                if (hasDash && Input.GetKey(abilityKey))
+                {
+                    Dash();
+                }
+                break;
 
-        if (cAbility == currentAbility.Grapple && hasGrapple && Input.GetKey(abilityKey)) 
-        {
-            Grapple();
-        }
+            case currentAbility.Slide:
+                if (hasSlide && Input.GetKey(abilityKey) && pc.bIsGrounded)
+                {
+                    Slide();
+                }
+                break;
 
-        else 
-        {
-            return;
+            case currentAbility.Grapple:
+                if (hasGrapple && Input.GetKey(abilityKey))
+                {
+                    Grapple();
+                }
+                break;
+
+            case currentAbility.None:
+                break;
         }
+        //if (cAbility == currentAbility.Double && hasDoubleJump && Input.GetKey(abilityKey))
+        //{
+        //    dJump();
+        //}
+
+        //if (cAbility == currentAbility.Dash && hasDash && Input.GetKey(abilityKey)) 
+        //{
+        //    Dash();
+        //}
+
+        //if (cAbility == currentAbility.Slide && hasSlide && Input.GetKey(abilityKey) && pc.bIsGrounded) 
+        //{
+        //    Slide();
+        //}
+
+        //if (cAbility == currentAbility.Grapple && hasGrapple && Input.GetKey(abilityKey)) 
+        //{
+        //    Grapple();
+        //}
+
+        //else 
+        //{
+        //    return;
+        //}
     }
 
     // DOUBLE JUMP
     private void dJump() {
-        //rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-        rb.AddForce(transform.up * pc.jumpforce, ForceMode.Impulse);
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
 
         hasDoubleJump = false;
         cAbility = currentAbility.None;
