@@ -11,6 +11,8 @@ public class AbilitySystem : MonoBehaviour
     public Transform playerCamera;
     private PlayerController pc;
     public LayerMask isWall;
+    public Transform grappleOrigin;
+    public LineRenderer lineRenderer;
 
     [Header("DoubleJump")]
     public bool hasDoubleJump = false;
@@ -31,6 +33,11 @@ public class AbilitySystem : MonoBehaviour
 
     [Header("Grapple")]
     public bool hasGrapple = false;
+    public bool isGrappling = false;
+    public float grappleSpeed = 10f;
+    public float stopDistance = 1.5f;
+    private Vector3 grapplePoint;
+
 
     [Header("Keybinds")]
     [SerializeField] private KeyCode abilityKey = KeyCode.Mouse1;
@@ -56,6 +63,16 @@ public class AbilitySystem : MonoBehaviour
 
     private void FixedUpdate() {
         AbilityHandler();
+
+        if (isGrappling) {
+            StartGrapple();
+            DrawGrappleLine();
+        }
+
+        if (isGrappling && Input.GetKey(KeyCode.Space)) {
+            StopGrapple();
+
+        }
     }
 
     private void AbilityHandler() {
@@ -93,30 +110,6 @@ public class AbilitySystem : MonoBehaviour
             case currentAbility.None:
                 break;
         }
-        //if (cAbility == currentAbility.Double && hasDoubleJump && Input.GetKey(abilityKey))
-        //{
-        //    dJump();
-        //}
-
-        //if (cAbility == currentAbility.Dash && hasDash && Input.GetKey(abilityKey)) 
-        //{
-        //    Dash();
-        //}
-
-        //if (cAbility == currentAbility.Slide && hasSlide && Input.GetKey(abilityKey) && pc.bIsGrounded) 
-        //{
-        //    Slide();
-        //}
-
-        //if (cAbility == currentAbility.Grapple && hasGrapple && Input.GetKey(abilityKey)) 
-        //{
-        //    Grapple();
-        //}
-
-        //else 
-        //{
-        //    return;
-        //}
     }
 
     // DOUBLE JUMP
@@ -194,12 +187,44 @@ public class AbilitySystem : MonoBehaviour
 
         Debug.DrawRay(playerCamera.position, playerCamera.forward * 50, Color.red, 5);
 
-        if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit, 50)) {
+        if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit, 20)) {
             if (hit.collider.tag == "Wall" || hit.collider.tag == "Enemy") {
                 Debug.Log("Grapple Has hit");
+
+                grapplePoint = hit.point;
+                isGrappling = true;
+
                 hasGrapple = false;
                 cAbility = currentAbility.None;
             }
+        }
+    }
+
+    private void StartGrapple() {
+        Vector3 direction = (grapplePoint - transform.position).normalized;
+        float distance = Vector3.Distance(transform.position, grapplePoint);
+
+        if (distance > stopDistance) {
+            rb.velocity = direction * grappleSpeed;
+        }
+        else {
+            StopGrapple();
+        }
+    }
+
+    void StopGrapple() {
+        isGrappling = false;
+        dJump();
+
+        if (lineRenderer) {
+            lineRenderer.enabled = false;
+        }
+    }
+
+    void DrawGrappleLine() {
+        if (lineRenderer && isGrappling) {
+            lineRenderer.SetPosition(0, grappleOrigin.position);
+            lineRenderer.SetPosition(1, grapplePoint);
         }
     }
 }
