@@ -286,7 +286,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c78d8192330444e9c3eee24558db34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
   detectionRange: 1000
   rotationSpeed: 10
 --- !u!114 &-3590549234905399441
@@ -303,6 +302,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isSphere: 1
   isSquare: 0
+  enemy: 2
 --- !u!1 &2583534836286680889
 GameObject:
   m_ObjectHideFlags: 0

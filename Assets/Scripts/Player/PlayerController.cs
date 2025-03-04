@@ -17,19 +17,19 @@ public class PlayerController : MonoBehaviour {
     private ParticleSystem speedParticles;
 
     [Header("Movement")]
-    public float movementSpeed;
-    public float walkSpeed;
-    public float sprintSpeed;
-    public float dashSpeed;
-    public float groundDrag;
+    public float walkSpeed = 7f;
+    public float sprintSpeed = 17f;
+    public float dashSpeed = 12f;
+    [HideInInspector] public float movementSpeed;
+    [HideInInspector] public float groundDrag = 5f;
 
-    public bool dashing;
-    public bool sliding;
+    [HideInInspector] public bool dashing = false;
+    [HideInInspector] public bool sliding = false;
 
     [Header("Jumping")]
-    public float jumpforce;
-    public float jumpCooldown;
-    public float airMultiplier;
+    public float jumpforce = 9f;
+    private float jumpCooldown = 0.25f;
+    private float airMultiplier = 0.4f;
     bool readyToJump = true;
 
 
@@ -38,15 +38,15 @@ public class PlayerController : MonoBehaviour {
     public KeyCode crouchKey = KeyCode.LeftControl;
 
     [Header("Slope Check")]
-    public float maxSlopeAngle;
+    private float maxSlopeAngle = 45f;
     private RaycastHit slopeHit;
 
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask isGround;
-    public bool bIsGrounded;
+    [HideInInspector] public bool bIsGrounded;
     public LayerMask isWater;
-    public bool bIsWater;
+    [HideInInspector] public bool bIsWater;
 
     public MovementState state;
     public enum MovementState {

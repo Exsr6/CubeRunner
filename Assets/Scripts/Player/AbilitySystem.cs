@@ -12,37 +12,37 @@ public class AbilitySystem : MonoBehaviour
     private PlayerController pc;
     public LayerMask isWall;
     public Transform grappleOrigin;
-    public LineRenderer lineRenderer;
+    private LineRenderer lr;
 
     [Header("DoubleJump")]
-    public bool hasDoubleJump = false;
-    [SerializeField] private float jumpForce = 12;
+    [SerializeField] private float jumpForce = 11f;
+    [HideInInspector] public bool hasDoubleJump = false;
 
     [Header("Dash")]
-    public bool hasDash = false;
-    [SerializeField] private float dashForce = 30f;
+    [SerializeField] private float dashForce = 25f;
     [SerializeField] private float dashDuration = 0.25f;
     private Vector3 delayedForceToApply;
+    [HideInInspector] public bool hasDash = false;
 
     [Header("Slide")]
-    public bool hasSlide = false;
     [SerializeField] private float slideForce = 10f;
-    [SerializeField] private float slideDuration = 1f;
+    [SerializeField] private float slideDuration = 0.4f;
+    [HideInInspector] public bool hasSlide = false;
     private float startYScale;
-    public float crouchYScale;
+    private float crouchYScale = 0.5f;
 
     [Header("Grapple")]
-    public bool hasGrapple = false;
-    public bool isGrappling = false;
-    public float grappleSpeed = 10f;
+    public float grappleSpeed = 20f;
     public float stopDistance = 1.5f;
+    [HideInInspector] public bool hasGrapple = false;
+    [HideInInspector] public bool isGrappling = false;
     private Vector3 grapplePoint;
 
 
     [Header("Keybinds")]
     [SerializeField] private KeyCode abilityKey = KeyCode.Mouse1;
 
-    public currentAbility cAbility;
+    [HideInInspector] public currentAbility cAbility;
 
     public enum currentAbility {
         None,
@@ -57,6 +57,8 @@ public class AbilitySystem : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         pc = GetComponent<PlayerController>();
+
+        lr = GetComponent<LineRenderer>();
 
         startYScale = transform.localScale.y;
     }
@@ -193,7 +195,7 @@ public class AbilitySystem : MonoBehaviour
 
                 grapplePoint = hit.point;
                 isGrappling = true;
-                lineRenderer.enabled = true;
+                lr.enabled = true;
 
                 hasGrapple = false;
                 cAbility = currentAbility.None;
@@ -217,15 +219,15 @@ public class AbilitySystem : MonoBehaviour
         isGrappling = false;
         dJump();
 
-        if (lineRenderer) {
-            lineRenderer.enabled = false;
+        if (lr) {
+            lr.enabled = false;
         }
     }
 
     void DrawGrappleLine() {
-        if (lineRenderer && isGrappling) {
-            lineRenderer.SetPosition(0, grappleOrigin.position);
-            lineRenderer.SetPosition(1, grapplePoint);
+        if (lr && isGrappling) {
+            lr.SetPosition(0, grappleOrigin.position);
+            lr.SetPosition(1, grapplePoint);
         }
     }
 }

@@ -9,6 +9,7 @@ TagManager:
   - endzone
   - Enemy
   - playerbullet
+  - killzone
   layers:
   - Default
   - TransparentFX

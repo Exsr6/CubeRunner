@@ -28,6 +28,11 @@ public class Zones : MonoBehaviour
             Debug.Log("You have reached the end!");
             timer.TimerRunning = false;
         }
+
+        if (other.gameObject.tag == "killzone")
+        {
+            
+        }
     }
 
     private void OnTriggerExit(Collider other)

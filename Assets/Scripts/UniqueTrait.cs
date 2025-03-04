@@ -9,16 +9,42 @@ public class UniqueTrait : MonoBehaviour
     private PlayerController pc;
 
     [Header("Enemy Type")]
-    public bool isSphere;
-    public bool isSquare;
+    public enemyType enemy;
+
+    public enum enemyType
+    {
+        None,
+        Basic,
+        Sphere,
+        Turret
+    }
 
     private void Start() {
         self = GetComponent<EnemyController>();
         pc = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
+    private void Update()
+    {
+        switch(enemy)
+        {
+            case enemyType.Basic:
+
+                break;
+
+            case enemyType.Sphere:
+
+                break;
+
+            case enemyType.Turret:
+
+                break;
+        }
+            
+    }
+
     private void OnTriggerEnter(Collider other) {
-        if (other.transform.CompareTag("Player") && isSphere) {
+        if (other.transform.CompareTag("Player") && enemy == enemyType.Sphere) {
             self.TakeDamage(1);
             pc.Jump();
         }
