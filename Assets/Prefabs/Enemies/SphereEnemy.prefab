@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: -3590549234905399441}
   m_Layer: 0
   m_Name: SphereEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -287,7 +287,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  detectionRange: 50
+  detectionRange: 1000
   rotationSpeed: 10
 --- !u!114 &-3590549234905399441
 MonoBehaviour:

@@ -648,7 +648,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  detectionRange: 50
+  detectionRange: 1000
   rotationSpeed: 10
 --- !u!1 &8772052701851075007
 GameObject:

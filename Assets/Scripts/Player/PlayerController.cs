@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour {
     public LayerMask isGround;
     public bool bIsGrounded;
     public LayerMask isWater;
-    bool bIsWater;
+    public bool bIsWater;
 
     public MovementState state;
     public enum MovementState {

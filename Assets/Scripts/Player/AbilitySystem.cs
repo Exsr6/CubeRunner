@@ -94,7 +94,7 @@ public class AbilitySystem : MonoBehaviour
                 break;
 
             case currentAbility.Slide:
-                if (hasSlide && Input.GetKey(abilityKey) && pc.bIsGrounded)
+                if (hasSlide && Input.GetKey(abilityKey) && (pc.bIsGrounded || pc.bIsWater))
                 {
                     Slide();
                 }
@@ -187,12 +187,13 @@ public class AbilitySystem : MonoBehaviour
 
         Debug.DrawRay(playerCamera.position, playerCamera.forward * 50, Color.red, 5);
 
-        if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit, 20)) {
+        if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit, 55)) {
             if (hit.collider.tag == "Wall" || hit.collider.tag == "Enemy") {
                 Debug.Log("Grapple Has hit");
 
                 grapplePoint = hit.point;
                 isGrappling = true;
+                lineRenderer.enabled = true;
 
                 hasGrapple = false;
                 cAbility = currentAbility.None;
