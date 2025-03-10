@@ -78,6 +78,7 @@ GameObject:
   - component: {fileID: 4092450024122654068}
   - component: {fileID: 6830588700502821549}
   - component: {fileID: 6540598881563283018}
+  - component: {fileID: 3652958593963856134}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -101,7 +102,7 @@ Transform:
   - {fileID: 2438996806287257436}
   - {fileID: 1957916399246621036}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &7503957850202983059
 Rigidbody:
@@ -215,7 +216,7 @@ MonoBehaviour:
   dashDuration: 0.25
   hasDash: 0
   slideForce: 10
-  slideDuration: 0.75
+  slideDuration: 0.25
   hasSlide: 0
   grappleSpeed: 20
   stopDistance: 1.5
@@ -350,6 +351,19 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &3652958593963856134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8204577278473459280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e446eac5a6a26484084626c1a50b4063, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  restartUI: {fileID: 0}
 --- !u!1 &8486863079313622338
 GameObject:
   m_ObjectHideFlags: 0
