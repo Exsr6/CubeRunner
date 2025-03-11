@@ -8,8 +8,8 @@ public class EnemyRotate : MonoBehaviour
     private CameraController cc;
 
     [Header("Variables")]
-    public float detectionRange = 10f;
-    public float rotationSpeed = 5f;
+    public float detectionRange = 1000f;
+    public float rotationSpeed = 10f;
 
     private void Start() {
         cc = FindObjectOfType<CameraController>();

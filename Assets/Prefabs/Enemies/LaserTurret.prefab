@@ -240,7 +240,7 @@ Transform:
   - {fileID: 6482421779228447888}
   - {fileID: 8453280779302436106}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2944657712683367978
 MonoBehaviour:
@@ -688,7 +688,7 @@ GameObject:
   - component: {fileID: 7480947735559162451}
   - component: {fileID: 5488220037062175142}
   - component: {fileID: 6222378351753033539}
-  - component: {fileID: 4361622166906403785}
+  - component: {fileID: 5252692831195789982}
   m_Layer: 6
   m_Name: Sphere
   m_TagString: Untagged
@@ -762,7 +762,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4361622166906403785
+--- !u!114 &5252692831195789982
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -774,7 +774,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c78d8192330444e9c3eee24558db34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionRange: 5
+  detectionRange: 1000
   rotationSpeed: 10
 --- !u!1 &5945583308851636387
 GameObject:
