@@ -27,8 +27,7 @@ public class Zones : MonoBehaviour
         if (other.gameObject.tag == "endzone" && goal.killsNeeded <= 0)
         {
             Debug.Log("You have reached the end!");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-            timer.TimerRunning = false;
+            FindObjectOfType<Timer>().CompleteLevel();
         }
     }
 
