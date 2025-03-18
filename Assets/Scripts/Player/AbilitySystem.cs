@@ -280,9 +280,9 @@ public class AbilitySystem : MonoBehaviour
 
         RaycastHit hit;
 
-        Debug.DrawRay(playerCamera.position, playerCamera.forward * 50, Color.red, 5);
+        Debug.DrawRay(playerCamera.position, playerCamera.forward * 75, Color.red, 5);
 
-        if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit, 55))
+        if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit, 75))
             if (hit.collider.tag == "Wall" || hit.collider.tag == "Enemy") {
                 Debug.Log("Grapple Has hit");
 
