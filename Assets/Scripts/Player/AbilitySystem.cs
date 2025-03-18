@@ -140,7 +140,7 @@ public class AbilitySystem : MonoBehaviour
                     dJump();
                     UpdateAbilitySlot(AbilityType.DoubleJump);
 
-                    if (abilityInventory[1] != AbilityType.None) {
+                    if (abilityInventory[0] == AbilityType.None) {
                         SwapAbilities();
                     }
                 }
@@ -151,7 +151,7 @@ public class AbilitySystem : MonoBehaviour
                     Dash();
                     UpdateAbilitySlot(AbilityType.Dash);
 
-                    if (abilityInventory[1] != AbilityType.None) {
+                    if (abilityInventory[0] == AbilityType.None) {
                         SwapAbilities();
                     }
                 }
@@ -162,7 +162,7 @@ public class AbilitySystem : MonoBehaviour
                     Slide();
                     UpdateAbilitySlot(AbilityType.Slide);
 
-                    if (abilityInventory[1] != AbilityType.None) {
+                    if (abilityInventory[0] == AbilityType.None) {
                         SwapAbilities();
                     }
                 }
@@ -173,7 +173,7 @@ public class AbilitySystem : MonoBehaviour
                     Grapple();
                     UpdateAbilitySlot(AbilityType.Grapple);
 
-                    if (abilityInventory[1] != AbilityType.None) {
+                    if (abilityInventory[0] == AbilityType.None) {
                         SwapAbilities();
                     }
                 }

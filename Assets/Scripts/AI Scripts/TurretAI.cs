@@ -8,7 +8,7 @@ public class TurretAI : MonoBehaviour
     private PlayerController pc;
     private Death death;
 
-    public float detectionRange = 10f;
+    public float detectionRange = 25f;
     public LineRenderer lineRenderer;
     public float killDelay = 3f;
 
