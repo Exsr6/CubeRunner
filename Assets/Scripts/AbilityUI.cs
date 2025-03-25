@@ -12,23 +12,30 @@ public class AbilityUI : MonoBehaviour {
     public Sprite dashSprite;
     public Sprite slideSprite;
     public Sprite grappleSprite;
-    public Sprite emptySprite; // Default empty icon
+    public Sprite emptySprite;
 
     private AbilitySystem abilitySystem;
 
     private void Start() {
+
+        // find and get the ability system
         abilitySystem = GameObject.Find("Player").GetComponent<AbilitySystem>();
+
+        // update the ui
         UpdateUI();
     }
 
     public void UpdateUI() {
 
+        // set ability type to the inventory slot
         AbilityType ability1 = abilitySystem.abilityInventory[0];
         AbilityType ability2 = abilitySystem.abilityInventory[1];
 
+        // get sprites
         abilitySlot1.sprite = GetAbilitySprite(ability1);
         abilitySlot2.sprite = GetAbilitySprite(ability2);
 
+        // set colours
         abilitySlot1.color = Color.white;
         abilitySlot2.color = Color.gray;
     }

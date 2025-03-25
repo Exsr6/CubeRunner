@@ -6,8 +6,4 @@ public class EndGoal : MonoBehaviour
 {
     [Header("References")]
     public int killsNeeded;
-
-    private void Update() {
-        //Debug.Log(killsNeeded);
-    }
 }

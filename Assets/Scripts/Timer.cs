@@ -24,8 +24,13 @@ public class Timer : MonoBehaviour
 
     void Start()
     {
+        // set variable to time
         startTime = Time.time;
+
+        // Create level key for saving
         levelKey = "BestTimes_" + SceneManager.GetActiveScene().name;
+
+        // load times function
         LoadTimes();
     }
 
@@ -33,6 +38,7 @@ public class Timer : MonoBehaviour
     {
         if (isRunning)
         {
+            // set ui text to time
             float currentTime = Time.time - startTime;
             timerText.text = currentTime.ToString("0.000");
         }
@@ -40,22 +46,29 @@ public class Timer : MonoBehaviour
 
     public void CompleteLevel() 
     {
+        // stop time when done
         isRunning = false;
+
+        // set finaltime ui and display
         float finalTime = Time.time - startTime;
         finalTimeText.text = finalTime.ToString("F2");
 
+        // get your best time and compare to time you just got
         float bestTime = bestTimes.Count > 0 ? bestTimes.Min() : finalTime;
         ShowTimeDifference(finalTime, bestTime);
 
         SaveTime(finalTime);
         ShowLeaderboard();
 
+        // get and find the gameobjects
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
         if (player != null) {
+            // get components
             PlayerController movementScript = player.GetComponent<PlayerController>();
             WeaponSystem weaponScript = player.GetComponent<WeaponSystem>();
             CameraController cameraScript = camera.GetComponent<CameraController>();
+            // make it so the player cant do anything when the level is done
             movementScript.enabled = false;
             weaponScript.enabled = false;
             cameraScript.enabled = false;

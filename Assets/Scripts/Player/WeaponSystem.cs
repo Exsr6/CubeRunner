@@ -16,16 +16,23 @@ public class WeaponSystem : MonoBehaviour {
     void Update() {
         if (Input.GetButton("Fire1") && Time.time >= nextFireTime) {
             Shoot();
+            // fire rate
             nextFireTime = Time.time + fireRate;
         }
     }
 
     void Shoot() {
+        // Create the bullet
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+
+        // get the component
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         if (rb != null) {
+            // apply velocity
             rb.velocity = firePoint.forward * bulletSpeed;
         }
-        Destroy(bullet, 5f); // Destroy bullet after 5 seconds
+
+        // Destroy bullet after 5 seconds
+        Destroy(bullet, 5f);
     }
 }

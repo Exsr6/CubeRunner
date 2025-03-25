@@ -20,32 +20,21 @@ public class UniqueTrait : MonoBehaviour
     }
 
     private void Start() {
+        // get the enemycontroller component
         self = GetComponent<EnemyController>();
+
+        // find the player object in the scene and get it
         pc = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
-    private void Update()
-    {
-        switch(enemy)
-        {
-            case enemyType.Basic:
-
-                break;
-
-            case enemyType.Sphere:
-
-                break;
-
-            case enemyType.Turret:
-
-                break;
-        }
-            
-    }
-
     private void OnTriggerEnter(Collider other) {
+
+        // check if player collides with the enemy type sphere
         if (other.transform.CompareTag("Player") && enemy == enemyType.Sphere) {
+            // enemy takes damage
             self.TakeDamage(1);
+
+            // player forced to jump (kind of like when mario jumps on an goomba)
             pc.Jump();
         }
     }

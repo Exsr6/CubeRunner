@@ -30,7 +30,6 @@ public class PlayerController : MonoBehaviour {
     [Header("Jumping")]
     public float jumpforce = 9f;
     private float jumpCooldown = 0.25f;
-    private float airMultiplier = 0.4f;
     bool readyToJump = true;
 
 
@@ -63,13 +62,16 @@ public class PlayerController : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
-        speedParticles = GameObject.Find("SpeedParticles").GetComponent<ParticleSystem>();
+        speedParticles = FindObjectOfType<ParticleSystem>();
     }
 
     // Update is called once per frame
     void Update() {
         bIsGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, isGround);
         bIsWater = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, isWater);
+
+        MovementX = Input.GetAxisRaw("Horizontal");
+        MovementY = Input.GetAxisRaw("Vertical");
 
         PlayerInput();
         SpeedControl();
@@ -89,8 +91,6 @@ public class PlayerController : MonoBehaviour {
     }
 
     void PlayerInput() {
-        MovementX = Input.GetAxisRaw("Horizontal");
-        MovementY = Input.GetAxisRaw("Vertical");
 
         if (Input.GetKey(jumpKey) && readyToJump && (bIsGrounded || bIsWater)) {
             readyToJump = false;
@@ -113,6 +113,7 @@ public class PlayerController : MonoBehaviour {
             movementSpeed = dashSpeed;
         }
 
+        // State - Sliding
         else if (sliding) {
             state = MovementState.sliding;
             movementSpeed = sprintSpeed;
@@ -137,24 +138,16 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    void MovePlayer() {
+    private void MovePlayer() {
         moveDirection = orientation.forward * MovementY + orientation.right * MovementX;
+        Vector3 force = moveDirection.normalized * movementSpeed * 10f;
 
         if (OnSlope()) {
-            rb.AddForce(GetSlopeMoveDirection() * movementSpeed * 20f ,ForceMode.Force);
-
-            if (rb.velocity.y > 0) {
-                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
-            }
+            force = GetSlopeMoveDirection() * movementSpeed * 20f;
+            if (rb.velocity.y > 0) rb.AddForce(Vector3.down * 80f, ForceMode.Force);
         }
 
-        if (bIsGrounded) {
-            rb.AddForce(moveDirection.normalized * movementSpeed * 10f, ForceMode.Force);
-        }
-        else if (!bIsGrounded) {
-            rb.AddForce(moveDirection.normalized * movementSpeed * 10f * airMultiplier, ForceMode.Force);
-        }
-
+        rb.AddForce(force, ForceMode.Force);
         rb.useGravity = !OnSlope();
     }
 
@@ -189,10 +182,8 @@ public class PlayerController : MonoBehaviour {
 
     private bool OnSlope() {
         if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.1f)) {
-            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-            return angle < maxSlopeAngle && angle != 0;
+            return Vector3.Angle(Vector3.up, slopeHit.normal) < maxSlopeAngle;
         }
-
         return false;
     }
 

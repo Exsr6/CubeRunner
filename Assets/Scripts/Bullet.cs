@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    // Bullet collision handler for each collidable surface
 
     private void OnCollisionEnter(Collision collision) {
         if (collision.transform.CompareTag("Wall"))

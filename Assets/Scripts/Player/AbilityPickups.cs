@@ -10,19 +10,27 @@ public class AbilityPickups : MonoBehaviour
     public AbilityType ability;
 
     private void Start() {
+
+        // find the player object in the scene and get the component
         AbilitySystem = GameObject.Find("Player").GetComponent<AbilitySystem>();
     }
 
     public void Update() {
+
+        // rotate gameobject on deltaTime
         transform.Rotate(new Vector3(15, 30, 45) * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other) {
 
-         if (other.gameObject.CompareTag("Player")) 
-         {
-             AbilitySystem.pickupAbility(ability);
-             Destroy(gameObject);
-         }
+        // if the player collides with the pickup
+        if (other.gameObject.CompareTag("Player")) 
+        {
+            // call the pickup ability function from the 
+            AbilitySystem.pickupAbility(ability);
+
+            // destroy self
+            Destroy(gameObject);
+        }
     }
 }
