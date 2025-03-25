@@ -146,7 +146,7 @@ MonoBehaviour:
   orientation: {fileID: 2438996806287257436}
   playerCamera: {fileID: 0}
   walkSpeed: 7
-  sprintSpeed: 17
+  sprintSpeed: 12
   dashSpeed: 12
   movementSpeed: 7
   groundDrag: 5
@@ -222,8 +222,9 @@ MonoBehaviour:
   stopDistance: 1.5
   hasGrapple: 0
   isGrappling: 0
+  abilityInventory: 0000000000000000
   abilityKey: 324
-  cAbility: 0
+  swapAbilityKey: 113
 --- !u!136 &6830588700502821549
 CapsuleCollider:
   m_ObjectHideFlags: 0
