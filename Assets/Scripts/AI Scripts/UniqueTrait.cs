@@ -5,8 +5,8 @@ using UnityEngine;
 public class UniqueTrait : MonoBehaviour
 {
     [Header("References")]
-    private EnemyController self;
-    private PlayerController pc;
+    private EnemyController _self;
+    private PlayerController _pc;
 
     [Header("Enemy Type")]
     public enemyType enemy;
@@ -21,10 +21,10 @@ public class UniqueTrait : MonoBehaviour
 
     private void Start() {
         // get the enemycontroller component
-        self = GetComponent<EnemyController>();
+        _self = GetComponent<EnemyController>();
 
         // find the player object in the scene and get it
-        pc = GameObject.Find("Player").GetComponent<PlayerController>();
+        _pc = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
     private void OnTriggerEnter(Collider other) {
@@ -32,10 +32,10 @@ public class UniqueTrait : MonoBehaviour
         // check if player collides with the enemy type sphere
         if (other.transform.CompareTag("Player") && enemy == enemyType.Sphere) {
             // enemy takes damage
-            self.TakeDamage(1);
+            _self.TakeDamage(1);
 
             // player forced to jump (kind of like when mario jumps on an goomba)
-            pc.Jump();
+            _pc.Jump();
         }
     }
 }

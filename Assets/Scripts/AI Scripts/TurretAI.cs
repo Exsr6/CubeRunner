@@ -5,42 +5,43 @@ using UnityEngine;
 public class TurretAI : MonoBehaviour
 {
     [Header("References")]
-    private PlayerController pc;
-    private Death death;
+    public LineRenderer _lineRenderer;
+
+    private PlayerController _pc;
+    private Death _death;
+    private Coroutine _killCoroutine;
 
     [Header("Variables")]
-    public float detectionRange = 25f;
-    public LineRenderer lineRenderer;
-    public float killDelay = 3f;
+    public float fDetectionRange = 25f;
+    public float fKillDelay = 3f;
 
-    private bool isTargeting = false;
-    private Coroutine killCoroutine;
+    private bool bIsTargeting = false;
 
     void Start() {
 
         // find the player controller and death handler in the scene
-        pc = FindObjectOfType<PlayerController>();
-        death = FindObjectOfType<Death>();
+        _pc = FindObjectOfType<PlayerController>();
+        _death = FindObjectOfType<Death>();
 
         // get the LineRenderer component
-        if (lineRenderer == null)
-            lineRenderer = GetComponent<LineRenderer>();
+        if (_lineRenderer == null)
+            _lineRenderer = GetComponent<LineRenderer>();
 
         // disable the line renderer at the start
-        lineRenderer.enabled = false;
+        _lineRenderer.enabled = false;
     }
 
     void Update() {
         // ensure the player reference exists before proceeding
-        if (pc != null) {
+        if (_pc != null) {
 
             // calculate the distance between the enemy and the player
-            float distance = Vector3.Distance(transform.position, pc.transform.position);
+            float distance = Vector3.Distance(transform.position, _pc.transform.position);
 
             // if the player is within detection range, start targeting
-            if (distance <= detectionRange) {
+            if (distance <= fDetectionRange) {
 
-                if (!isTargeting) {
+                if (!bIsTargeting) {
 
                     // begin targeting sequence
                     StartTargeting();
@@ -48,8 +49,8 @@ public class TurretAI : MonoBehaviour
 
                 else {
                     // continuously update the line renderer to track the player's position
-                    lineRenderer.SetPosition(0, transform.position);
-                    lineRenderer.SetPosition(1, pc.transform.position);
+                    _lineRenderer.SetPosition(0, transform.position);
+                    _lineRenderer.SetPosition(1, _pc.transform.position);
 
                 }
             }
@@ -61,39 +62,39 @@ public class TurretAI : MonoBehaviour
     }
 
     void StartTargeting() {
-        isTargeting = true;
-        lineRenderer.enabled = true;
+        bIsTargeting = true;
+        _lineRenderer.enabled = true;
 
         // set line positions
-        lineRenderer.SetPosition(0, transform.position);
-        lineRenderer.SetPosition(1, pc.transform.position);
+        _lineRenderer.SetPosition(0, transform.position);
+        _lineRenderer.SetPosition(1, _pc.transform.position);
 
         // start the routine that will kill the player
-        killCoroutine = StartCoroutine(KillPlayerAfterDelay());
+        _killCoroutine = StartCoroutine(KillPlayerAfterDelay());
     }
 
     void StopTargeting() {
-        isTargeting = false;
-        lineRenderer.enabled = false;
+        bIsTargeting = false;
+        _lineRenderer.enabled = false;
 
         // stop the routine if player moves away
-        if (killCoroutine != null) {
-            StopCoroutine(killCoroutine);
-            killCoroutine = null;
+        if (_killCoroutine != null) {
+            StopCoroutine(_killCoroutine);
+            _killCoroutine = null;
         }
     }
 
     IEnumerator KillPlayerAfterDelay() {
         // delay the player death by the killDelay float value
-        yield return new WaitForSeconds(killDelay);
+        yield return new WaitForSeconds(fKillDelay);
 
         // check if the player is still in range
-        float distance = Vector3.Distance(transform.position, pc.transform.position);
-        if (distance <= detectionRange) {
+        float distance = Vector3.Distance(transform.position, _pc.transform.position);
+        if (distance <= fDetectionRange) {
             Debug.Log("Player Killed");
 
             // kill the player
-            death.Die();
+            _death.Die();
         }
     }
 }

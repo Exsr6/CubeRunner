@@ -2079,6 +2079,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   killsNeeded: 3
+  transparent: {fileID: 2100000, guid: fe29378d745b082468456d2391f56d67, type: 2}
+  solid: {fileID: 2100000, guid: 3ca8f7ac917e7dc428b069eb971b45d0, type: 2}
 --- !u!1 &400090022
 GameObject:
   m_ObjectHideFlags: 0

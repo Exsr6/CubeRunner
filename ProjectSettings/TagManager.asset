@@ -10,6 +10,7 @@ TagManager:
   - Enemy
   - playerbullet
   - killzone
+  - sandboxEnd
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - UI
   - isGround
   - isWater
-  - 
+  - Bullet
   - 
   - 
   - 
