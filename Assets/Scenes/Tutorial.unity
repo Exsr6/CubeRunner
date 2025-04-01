@@ -1850,9 +1850,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eee2d51e8cde4514e83c5d8abed1009d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _transparent: {fileID: 0}
-  _solid: {fileID: 0}
-  iKillsNeeded: 0
+  _transparent: {fileID: 2100000, guid: fe29378d745b082468456d2391f56d67, type: 2}
+  _solid: {fileID: 2100000, guid: 3ca8f7ac917e7dc428b069eb971b45d0, type: 2}
+  iKillsNeeded: 2
 --- !u!1 &448913691
 GameObject:
   m_ObjectHideFlags: 0
@@ -10374,7 +10374,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh23938
+  m_Name: pb_Mesh51312
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2

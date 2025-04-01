@@ -23,7 +23,7 @@ public class EnemyAI : MonoBehaviour {
     private float fFireCooldown = 0f;
     private float fWaitTime = 0f;
     private float fWaitCounter = 0f;
-    private bool isJumping = false;
+    private bool bIsJumping = false;
 
     void Start() {
         _agent = GetComponent<NavMeshAgent>();
@@ -51,12 +51,12 @@ public class EnemyAI : MonoBehaviour {
         }
 
         // Apply gravity manually when falling
-        if (!_agent.isOnOffMeshLink && !isJumping) {
+        if (!_agent.isOnOffMeshLink && !bIsJumping) {
             _rb.velocity += Vector3.down * fGravityMultiplier * Time.deltaTime;
         }
 
         // Handle jumping over obstacles
-        if (_agent.isOnOffMeshLink && !isJumping) {
+        if (_agent.isOnOffMeshLink && !bIsJumping) {
             StartCoroutine(JumpAcrossGap());
         }
 
@@ -96,7 +96,7 @@ public class EnemyAI : MonoBehaviour {
     }
 
     IEnumerator JumpAcrossGap() {
-        isJumping = true;
+        bIsJumping = true;
 
         OffMeshLinkData data = _agent.currentOffMeshLinkData;
         Vector3 startPos = _agent.transform.position;
@@ -117,6 +117,6 @@ public class EnemyAI : MonoBehaviour {
         _agent.isStopped = false;
         _agent.CompleteOffMeshLink();
 
-        isJumping = false;
+        bIsJumping = false;
     }
 }
