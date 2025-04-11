@@ -16,6 +16,10 @@ public class PlayerHealth : MonoBehaviour
     public int maxHealth = 3;
     private int currentHealth;
 
+    [Header("I-Frames")]
+    public float invincibilityDuration = 1f;
+    private bool isInvincible = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,12 +30,17 @@ public class PlayerHealth : MonoBehaviour
     }
 
     public void TakeDamage(int damage) {
+        if (isInvincible) return;
+
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         UpdateHealthUI();
 
         if (currentHealth <= 0) {
             _death.Die();
+        }
+        else {
+            StartCoroutine(Invincibility());
         }
     }
 
@@ -46,4 +55,13 @@ public class PlayerHealth : MonoBehaviour
             }
         }
     }
+
+    IEnumerator Invincibility() {
+        isInvincible = true;
+
+        yield return new WaitForSeconds(invincibilityDuration);
+
+        isInvincible = false;
+    }
+
 }

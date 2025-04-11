@@ -22,6 +22,9 @@ public class EnemyController : MonoBehaviour
         // set the max health to the intialised value
         iMaxhealth = iHealth;
 
+        _Healhbar = FindObjectOfType<Slider>();
+        _cg = FindObjectOfType<CanvasGroup>();
+
         // find the endzone gameobject
         _goal = GameObject.Find("EndZone").GetComponent<EndGoal>();
     }

@@ -16,6 +16,11 @@ public class Bullet : MonoBehaviour
         }
         else if (other.gameObject.CompareTag("Player")) {
             other.gameObject.GetComponent<PlayerHealth>().TakeDamage(1);
+            Destroy(gameObject);
+        }
+        else if (other.gameObject.TryGetComponent<BossAI>(out BossAI bAI)) {
+            bAI.TakeDamage(1);
+            Destroy(gameObject);
         }
 
     }

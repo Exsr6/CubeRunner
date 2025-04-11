@@ -85,8 +85,6 @@ public class AbilitySystem : MonoBehaviour
         if (bIsGrappling && Input.GetKey(KeyCode.Space))
             StopGrapple();
 
-        Debug.Log(fLastAbilityTime);
-
     }
 
     private void AbilityHandler() {
