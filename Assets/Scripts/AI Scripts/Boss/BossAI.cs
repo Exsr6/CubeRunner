@@ -28,6 +28,11 @@ public class BossAI : MonoBehaviour {
         iCurrentHealth = iMaxHealth;
     }
 
+    private void Update() {
+        //Debug.Log("Current Health: " + iCurrentHealth);
+
+    }
+
     public void TakeDamage(int damage) {
         if (bCanTakeDamage) {
             iCurrentHealth -= damage;
@@ -80,8 +85,9 @@ public class BossAI : MonoBehaviour {
     void FireBullet(Vector3 origin, Vector3 direction) {
         GameObject bullet = Instantiate(projectilePrefab, origin, Quaternion.LookRotation(direction));
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
+        Physics.IgnoreCollision(bullet.GetComponent<Collider>(), GetComponent<Collider>());
         if (rb != null)
-            rb.velocity = direction * 10f;
+            rb.velocity = direction * 25f;
     }
 
     void PistolLogic() {

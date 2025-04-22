@@ -18,25 +18,25 @@ public class AbilitySystem : MonoBehaviour
 
     [Header("DoubleJump")]
     [SerializeField] private float fJumpForce = 11f;
-    [HideInInspector] public bool bHasDoubleJump = false;
+    [HideInInspector] public int iDoubleJumpCount = 0;
 
     [Header("Dash")]
     [SerializeField] private float fDashForce = 25f;
     [SerializeField] private float fDashDuration = 0.25f;
     private Vector3 delayedForceToApply;
-    [HideInInspector] public bool bHasDash = false;
+    [HideInInspector] public int iDashCount = 0;
 
     [Header("Slide")]
     [SerializeField] private float fSlideForce = 10f;
     [SerializeField] private float fSlideDuration = 0.4f;
-    [HideInInspector] public bool bHasSlide = false;
+    [HideInInspector] public int iSlideCount = 0;
     private float fStartYScale;
     private float fCrouchYScale = 0.5f;
 
     [Header("Grapple")]
     public float fGrappleSpeed = 20f;
     public float fStopDistance = 1.5f;
-    [HideInInspector] public bool bHasGrapple = false;
+    [HideInInspector] public int iGrappleCount = 0;
     [HideInInspector] public bool bIsGrappling = false;
     private Vector3 grapplePoint;
 
@@ -85,6 +85,7 @@ public class AbilitySystem : MonoBehaviour
         if (bIsGrappling && Input.GetKey(KeyCode.Space))
             StopGrapple();
 
+        Debug.Log(iDoubleJumpCount);
     }
 
     private void AbilityHandler() {
@@ -100,31 +101,52 @@ public class AbilitySystem : MonoBehaviour
 
     public void pickupAbility(AbilityType newAbility) 
     {
-        if (abilityInventory[0] == AbilityType.None) 
+        if (abilityInventory[0] == AbilityType.None) {
             abilityInventory[0] = newAbility;
+            UnlockAbility(newAbility);
+        }
 
-        else if (abilityInventory[1] == AbilityType.None)
+        else if (abilityInventory[1] == AbilityType.None) {
             abilityInventory[1] = newAbility;
+            UnlockAbility(newAbility);
+        }
 
-        else
+        else {
+            AbilityType replacedAbility = abilityInventory[iActiveAbilityIndex];
+            switch (replacedAbility) {
+                case AbilityType.DoubleJump:
+                    iDoubleJumpCount = Mathf.Max(0, iDoubleJumpCount - 1);
+                    break;
+                case AbilityType.Dash:
+                    iDashCount = Mathf.Max(0, iDashCount - 1);
+                    break;
+                case AbilityType.Slide:
+                    iSlideCount = Mathf.Max(0, iSlideCount - 1);
+                    break;
+                case AbilityType.Grapple:
+                    iGrappleCount = Mathf.Max(0, iGrappleCount - 1);
+                    break;
+            }
+
             abilityInventory[iActiveAbilityIndex] = newAbility;
+            UnlockAbility(newAbility);
+        }
 
-        UnlockAbility(newAbility);
         _abilityUI.UpdateUI();
     }
     private void UnlockAbility(AbilityType ability) {
         switch (ability) {
             case AbilityType.DoubleJump:
-                bHasDoubleJump = true; 
+                iDoubleJumpCount++; 
                 break;
-            case AbilityType.Dash: 
-                bHasDash = true; 
+            case AbilityType.Dash:
+                iDashCount++;
                 break;
-            case AbilityType.Slide: 
-                bHasSlide = true; 
+            case AbilityType.Slide:
+                iSlideCount++;
                 break;
             case AbilityType.Grapple:
-                bHasGrapple = true; 
+                iGrappleCount++;
                 break;
         }
     }
@@ -134,7 +156,7 @@ public class AbilitySystem : MonoBehaviour
 
         switch (ability) {
             case AbilityType.DoubleJump:
-                if (bHasDoubleJump) {
+                if (iDoubleJumpCount > 0) {
                     dJump();
                     UpdateAbilitySlot(AbilityType.DoubleJump);
 
@@ -145,7 +167,7 @@ public class AbilitySystem : MonoBehaviour
                 break;
 
             case AbilityType.Dash:
-                if (bHasDash) {
+                if (iDashCount > 0) {
                     Dash();
                     UpdateAbilitySlot(AbilityType.Dash);
 
@@ -156,7 +178,7 @@ public class AbilitySystem : MonoBehaviour
                 break;
 
             case AbilityType.Slide:
-                if (bHasSlide && (_pc.bIsGrounded || _pc.bIsWater)) {
+                if (iSlideCount > 0 && (_pc.bIsGrounded || _pc.bIsWater)) {
                     Slide();
                     UpdateAbilitySlot(AbilityType.Slide);
 
@@ -167,7 +189,7 @@ public class AbilitySystem : MonoBehaviour
                 break;
 
             case AbilityType.Grapple:
-                if (bHasGrapple) {
+                if (iGrappleCount > 0) {
                     Grapple();
                     UpdateAbilitySlot(AbilityType.Grapple);
 
@@ -202,6 +224,21 @@ public class AbilitySystem : MonoBehaviour
         for (int i = 0; i < abilityInventory.Length; i++) {
             if (abilityInventory[i] == usedAbility) {
                 abilityInventory[i] = AbilityType.None;
+
+                switch (usedAbility) {
+                    case AbilityType.DoubleJump:
+                        iDoubleJumpCount = Mathf.Max(0, iDoubleJumpCount - 1);
+                        break;
+                    case AbilityType.Dash:
+                        iDashCount = Mathf.Max(0, iDashCount - 1);
+                        break;
+                    case AbilityType.Slide:
+                        iSlideCount = Mathf.Max(0, iSlideCount - 1);
+                        break;
+                    case AbilityType.Grapple:
+                        iGrappleCount = Mathf.Max(0, iGrappleCount - 1);
+                        break;
+                }
                 break;
             }
         }
@@ -217,8 +254,6 @@ public class AbilitySystem : MonoBehaviour
         _rb.velocity = new Vector3(_rb.velocity.x, 0f, _rb.velocity.z);
 
         _rb.AddForce(transform.up * fJumpForce, ForceMode.Impulse);
-
-        bHasDoubleJump = false;
     }
 
 
@@ -236,8 +271,6 @@ public class AbilitySystem : MonoBehaviour
         Invoke(nameof(DelayedDashForce), 0.025f);
 
         Invoke(nameof(StopDash), fDashDuration);
-
-        bHasDash = false;
     }
 
     private void DelayedDashForce() {
@@ -256,7 +289,6 @@ public class AbilitySystem : MonoBehaviour
 
         transform.localScale = new Vector3(transform.localScale.x, fCrouchYScale, transform.localScale.z);
         _rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
-        bHasSlide = false;
 
         Invoke(nameof(DelayedSlideForce), 0.1f);
 
@@ -287,8 +319,6 @@ public class AbilitySystem : MonoBehaviour
                 grapplePoint = hit.point;
                 bIsGrappling = true;
                 _lr.enabled = true;
-
-                bHasGrapple = false;
             }
     }
 

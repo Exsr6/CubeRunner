@@ -80,6 +80,7 @@ GameObject:
   - component: {fileID: 6540598881563283018}
   - component: {fileID: 3652958593963856134}
   - component: {fileID: 5862593026769466534}
+  - component: {fileID: 945009888331096068}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -103,7 +104,7 @@ Transform:
   - {fileID: 2438996806287257436}
   - {fileID: 1957916399246621036}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &7503957850202983059
 Rigidbody:
@@ -181,8 +182,11 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1889949017341388276, guid: 156528af1dc111d4daa630c7909694aa, type: 3}
   firePoint: {fileID: 0}
   FireSound: {fileID: 5862593026769466534}
+  ammoText: {fileID: 0}
   bulletSpeed: 100
   fireRate: 0.2
+  maxAmmo: 10
+  currentAmmo: 0
 --- !u!114 &1467923066495673139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,6 +199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71cd1758c44e65449ad64f1986939473, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _levelCompleteUI: {fileID: 0}
 --- !u!114 &4092450024122654068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,26 +212,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f724ed6a14c586e458821f81657ed77f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCamera: {fileID: 0}
-  isWall:
+  _playerCamera: {fileID: 0}
+  _isWall:
     serializedVersion: 2
     m_Bits: 64
-  grappleOrigin: {fileID: 0}
-  jumpForce: 11
-  hasDoubleJump: 0
-  dashForce: 25
-  dashDuration: 0.25
-  hasDash: 0
-  slideForce: 10
-  slideDuration: 0.25
-  hasSlide: 0
-  grappleSpeed: 20
-  stopDistance: 1.5
-  hasGrapple: 0
-  isGrappling: 0
+  _grappleOrigin: {fileID: 0}
+  fJumpForce: 11
+  bHasDoubleJump: 0
+  fDashForce: 25
+  fDashDuration: 0.25
+  bHasDash: 0
+  fSlideForce: 10
+  fSlideDuration: 0.4
+  bHasSlide: 0
+  fGrappleSpeed: 20
+  fStopDistance: 1.5
+  bHasGrapple: 0
+  bIsGrappling: 0
   abilityInventory: 0000000000000000
-  abilityKey: 324
-  swapAbilityKey: 113
+  _abilityKey: 324
+  _swapAbilityKey: 113
 --- !u!136 &6830588700502821549
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -463,6 +468,26 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &945009888331096068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8204577278473459280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba7c6a6089f662545a63ed9dcd8448f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hearts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  _fullHeart: {fileID: 21300000, guid: 24a0e317b4434204195c03888e14e6c0, type: 3}
+  _emptyHeart: {fileID: 21300000, guid: 3f45e9f3584f00b418bc3227b42153a6, type: 3}
+  maxHealth: 3
+  invincibilityDuration: 1
 --- !u!1 &8486863079313622338
 GameObject:
   m_ObjectHideFlags: 0

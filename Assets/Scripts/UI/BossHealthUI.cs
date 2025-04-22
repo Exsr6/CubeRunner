@@ -14,6 +14,6 @@ public class BossHealthUI : MonoBehaviour {
     }
 
     void Update() {
-         bossHealthbar.value = Mathf.Lerp(bossHealthbar.value, boss.iCurrentHealth, Time.deltaTime * 10f);
+         bossHealthbar.value = boss.iCurrentHealth;
     }
 }

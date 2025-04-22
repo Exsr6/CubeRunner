@@ -5,13 +5,15 @@ using UnityEngine;
 public class BossMovement : MonoBehaviour {
     [Header("References")]
     public List<Transform> _pathPoints;
-    public Transform playerTransform;
+    public List<float> _waitDurations;
+    public Transform _playerTransform;
+    public GameObject _forceField;
 
     private BossAI _bossAI;
 
     [Header("Variables")]
     public float fMoveSpeed = 20f;
-    public float fStopDuration = 1f;
+    public float fDefaultStopDuration = 1f;
 
     private int iCurrentPointIndex = 0;
     private bool bIsWaiting = false;
@@ -25,34 +27,39 @@ public class BossMovement : MonoBehaviour {
 }
 
     void Update() {
+
+        Vector3 lookDir = _playerTransform.position - transform.position;
+        lookDir.y = 0;
+        transform.rotation = Quaternion.LookRotation(lookDir);
+
         if (bIsWaiting) return;
 
-        // Move towards the next point
-        Transform Target = _pathPoints[iCurrentPointIndex];
-        transform.position = Vector3.MoveTowards(transform.position, Target.position, fMoveSpeed * Time.deltaTime);
-
-        if (Vector3.Distance(transform.position, Target.position) < 0.1f) {
-            // Stop and wait at the point
-            StartCoroutine(WaitAtPoint());
+        if (iCurrentPointIndex != _pathPoints.Count) {
+            // Move towards the next point
+            Transform Target = _pathPoints[iCurrentPointIndex];
+            transform.position = Vector3.MoveTowards(transform.position, Target.position, fMoveSpeed * Time.deltaTime);
+            if (Vector3.Distance(transform.position, Target.position) < 0.1f) {
+                // Stop and wait at the point
+                StartCoroutine(WaitAtPoint());
+            }
+        }
+        else {
+            _bossAI.bCanTakeDamage = true;
         }
     }
 
     private IEnumerator WaitAtPoint() {
         bIsWaiting = true;
         _bossAI.bCanTakeDamage = true;
+        _forceField.SetActive(false);
 
         Debug.Log("Waiting at point " + iCurrentPointIndex);
 
-        float fWaitTime = fStopDuration;
-        float fShootCooldown = 1f; // Fire every 1 second
+        float fWaitTime = (iCurrentPointIndex < _waitDurations.Count) ? _waitDurations[iCurrentPointIndex] : fDefaultStopDuration;
+        float fShootCooldown = 0.5f; // Fire every 0.5 seconds
         float fShootTimer = 0f;
 
         while (fWaitTime > 0) {
-            if (playerTransform != null) {
-                Vector3 lookDir = playerTransform.position - transform.position;
-                lookDir.y = 0;
-                transform.rotation = Quaternion.LookRotation(lookDir);
-            }
 
             fShootTimer -= Time.deltaTime;
             if (fShootTimer <= 0f) {
@@ -66,9 +73,10 @@ public class BossMovement : MonoBehaviour {
 
         // Move to the next point
         Debug.Log("Moving to point " + iCurrentPointIndex);
-        iCurrentPointIndex = (iCurrentPointIndex + 1) % _pathPoints.Count;
+        iCurrentPointIndex = (iCurrentPointIndex + 1);
         bIsWaiting = false;
         _bossAI.bCanTakeDamage = false;
+        _forceField.SetActive(true);
     }
 
 }
