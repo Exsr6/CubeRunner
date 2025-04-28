@@ -7,7 +7,6 @@ public class AbilityPickups : MonoBehaviour
 {
     [Header("References")]
     private AbilitySystem _AbilitySystem;
-    private AudioSource _AbilityPickupSound;
 
     [Header("Variables")]
     public float fRespawnTime = 5f;
@@ -19,7 +18,6 @@ public class AbilityPickups : MonoBehaviour
 
         // find the player object in the scene and get the component
         _AbilitySystem = GameObject.Find("Player").GetComponent<AbilitySystem>();
-        _AbilityPickupSound = GetComponent<AudioSource>();
 
         vSpawnPosition = transform.position;
     }
@@ -37,8 +35,6 @@ public class AbilityPickups : MonoBehaviour
         {
             // call the pickup ability function from the 
             _AbilitySystem.pickupAbility(ability);
-
-            _AbilityPickupSound.Play();
 
             // destroy self
             gameObject.SetActive(false);

@@ -48,10 +48,10 @@ public class PlayerHealth : MonoBehaviour
     {
         for (int i = 0; i < _hearts.Length; i++) {
             if (i < currentHealth) {
-                _hearts[i].sprite = _fullHeart; // Red heart
+                _hearts[i].sprite = _fullHeart;
             }
             else {
-                _hearts[i].sprite = _emptyHeart; // Grey heart
+                _hearts[i].sprite = _emptyHeart;
             }
         }
     }

@@ -7,7 +7,6 @@ using static AbilitySystem;
 public class TutorialPickup : MonoBehaviour
 {
     private AbilitySystem AbilitySystem;
-    public AudioSource AbilityPickupSound;
     private TutorialManager tm;
 
     public AbilityType ability;
@@ -26,7 +25,6 @@ public class TutorialPickup : MonoBehaviour
 
         if (other.gameObject.CompareTag("Player")) {
             AbilitySystem.pickupAbility(ability);
-            AbilityPickupSound.Play();
             if (tm.stepIndex == 2) {
                 tm.CompleteStep();
             }

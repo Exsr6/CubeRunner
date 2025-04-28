@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    private void Update() {
+        // Destroy bullet after 5 seconds
+        Destroy(gameObject, 5f);
+    }
+
     // Bullet collision handler for each collidable surface
     private void OnCollisionEnter(Collision other) {
         if (other.transform.CompareTag("Wall"))

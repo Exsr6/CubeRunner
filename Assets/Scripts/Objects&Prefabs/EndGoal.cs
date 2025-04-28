@@ -19,6 +19,8 @@ public class EndGoal : MonoBehaviour
 
     private void Update()
     {
+        // Check if the player has killed enough enemies
+        // And change the material depending on the amount of kills needed
         if (iKillsNeeded <= 0)
         {
             _mr.material = _solid;

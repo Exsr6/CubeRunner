@@ -7,7 +7,6 @@ public class AmmoPickup : MonoBehaviour
 {
     private WeaponSystem _weaponSystem;
 
-    // Start is called before the first frame update
     void Start()
     {
         _weaponSystem = GameObject.Find("Player").GetComponent<WeaponSystem>();
@@ -21,6 +20,7 @@ public class AmmoPickup : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
 
+        // if the player collides with the pickup add ammo and update UI
         if (other.gameObject.CompareTag("Player")) {
             _weaponSystem.currentAmmo += 10;
             _weaponSystem.UpdateAmmoUI();

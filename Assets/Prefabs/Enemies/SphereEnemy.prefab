@@ -250,9 +250,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3e611048672c784f8c9af601222e696, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Healhbar: {fileID: 9154123840051974663}
-  cg: {fileID: 8273320317275318384}
-  health: 1
+  _Healhbar: {fileID: 0}
+  _cg: {fileID: 0}
+  iHealth: 1
 --- !u!135 &1849054166802255987
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -286,8 +286,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c78d8192330444e9c3eee24558db34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionRange: 1000
-  rotationSpeed: 10
+  fDetectionRange: 1000
+  fRotationSpeed: 10
 --- !u!114 &-3590549234905399441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -300,8 +300,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffc784a141e221a41ae76c2bba16b541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isSphere: 1
-  isSquare: 0
   enemy: 2
 --- !u!1 &2583534836286680889
 GameObject:
