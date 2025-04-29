@@ -35,6 +35,7 @@ public class Zones : MonoBehaviour
 
         if (other.gameObject.tag == "sandboxEnd" && _goal.iKillsNeeded <= 0) {
 
+            // Freeze The Game
             Time.timeScale = 0;
 
             // get and find the gameobjects

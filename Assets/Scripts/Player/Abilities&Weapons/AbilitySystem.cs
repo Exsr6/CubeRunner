@@ -389,8 +389,10 @@ public class AbilitySystem : MonoBehaviour
 
         RaycastHit hit;
 
+        // Debug raycast for testing
         Debug.DrawRay(_playerCamera.position, _playerCamera.forward * 75, Color.red, 5);
 
+        // Check if raycast hits a wall or enemy
         if (Physics.Raycast(_playerCamera.position, _playerCamera.forward, out hit, 75))
             if (hit.collider.tag == "Wall" || hit.collider.tag == "Enemy") {
                 Debug.Log("Grapple Has hit");

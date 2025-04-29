@@ -49,6 +49,7 @@ public class BossMovement : MonoBehaviour {
     }
 
     private IEnumerator WaitAtPoint() {
+        // Make the boss wait at the current point and make vulnerable
         bIsWaiting = true;
         _bossAI.bCanTakeDamage = true;
         _forceField.SetActive(false);
@@ -56,9 +57,10 @@ public class BossMovement : MonoBehaviour {
         Debug.Log("Waiting at point " + iCurrentPointIndex);
 
         float fWaitTime = (iCurrentPointIndex < _waitDurations.Count) ? _waitDurations[iCurrentPointIndex] : fDefaultStopDuration;
-        float fShootCooldown = 0.5f; // Fire every 0.5 seconds
+        float fShootCooldown = 0.5f;
         float fShootTimer = 0f;
 
+        // While waiting, shoot at the player
         while (fWaitTime > 0) {
 
             fShootTimer -= Time.deltaTime;
@@ -71,7 +73,7 @@ public class BossMovement : MonoBehaviour {
             yield return null;
         }
 
-        // Move to the next point
+        // Move to the next point and make invulnerable
         Debug.Log("Moving to point " + iCurrentPointIndex);
         iCurrentPointIndex = (iCurrentPointIndex + 1);
         bIsWaiting = false;

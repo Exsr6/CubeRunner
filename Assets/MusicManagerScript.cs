@@ -12,20 +12,23 @@ public class MusicManagerScript : MonoBehaviour {
     private static MusicManagerScript instance;
 
     void Awake() {
+        // make a singleton of the music manager
         if (instance == null) {
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else {
+            // if an instance already exists, destroy this one
             Destroy(gameObject);
             return;
         }
     }
 
-    // Start is called before the first frame update
     void Start() {
+        // Get audio component
         _audioSource = GetComponent<AudioSource>();
 
+        // Call Play Music Function
         PlayMusic(SceneManager.GetActiveScene());
 
         // Listen for scene changes
@@ -37,15 +40,19 @@ public class MusicManagerScript : MonoBehaviour {
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        // Play music dependinding on the scene
         PlayMusic(scene);
     }
 
     void PlayMusic(Scene scene) {
+        // check if the scene is the final level
         if (scene.name == "finalLevel")
             SwitchToFinalLevelMusic();
+        // else play normal music
         else
             SwitchToNormalMusic();
 }
+    // Final Level Music playing
     void SwitchToFinalLevelMusic() {
         if (_audioSource.clip != _finalLevelMusic) {
             _audioSource.Stop();
@@ -54,7 +61,7 @@ public class MusicManagerScript : MonoBehaviour {
             _audioSource.Play();
         }
     }
-
+    // Normal Music playing
     void SwitchToNormalMusic() {
         if (_audioSource.clip != _normalMusic) {
             _audioSource.Stop();

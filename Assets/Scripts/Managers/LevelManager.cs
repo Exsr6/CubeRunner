@@ -9,7 +9,8 @@ public class LevelManager : MonoBehaviour
         // get current level and restart it
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
-        Time.timeScale = 1f; // unpause the game
+        // unpause the game
+        Time.timeScale = 1f;
     }
 
     public void nextLevel() {
@@ -22,7 +23,8 @@ public class LevelManager : MonoBehaviour
             Debug.Log("No more levels!");
         }
 
-        Time.timeScale = 1f; // unpause the game
+        // unpause the game
+        Time.timeScale = 1f;
     }
 
     public void quitgame() {

@@ -59,6 +59,7 @@ public class Timer : MonoBehaviour
         float bestTime = lBestTimes.Count > 0 ? lBestTimes.Min() : finalTime;
         ShowTimeDifference(finalTime, bestTime);
 
+        // Save the time and then show the leaderboard
         SaveTime(finalTime);
         ShowLeaderboard();
 
@@ -83,6 +84,8 @@ public class Timer : MonoBehaviour
 
     void ShowTimeDifference(float finalTime, float bestTime) 
     {
+        // Show the difference between the best time and the final time
+        // Change Colour depending on if its better or worse
         float difference = finalTime - bestTime;
         if (difference == 0) {
             _timeDifferenceText.text = "New Best Time!";
@@ -100,6 +103,7 @@ public class Timer : MonoBehaviour
 
     void SaveTime(float time) 
     {
+        // Add times to list and save to PlayerPrefs if its in the top 10
         lBestTimes.Add(time);
         lBestTimes = lBestTimes.OrderBy(t => t).Take(10).ToList();
         PlayerPrefs.SetString(sLevelKey, string.Join(",", lBestTimes));
@@ -108,6 +112,7 @@ public class Timer : MonoBehaviour
 
     void LoadTimes() 
     {
+        // Load times from PlayerPrefs on current level
         if (PlayerPrefs.HasKey(sLevelKey)) {
             string savedTimes = PlayerPrefs.GetString(sLevelKey);
             lBestTimes = savedTimes.Split(',').Select(float.Parse).ToList();
@@ -116,6 +121,7 @@ public class Timer : MonoBehaviour
 
     void ShowLeaderboard() 
     {
+        // Show the leaderboard Times
         _leaderboardText.text = "Best Times:\n";
         for (int i = 0; i < lBestTimes.Count; i++) {
             _leaderboardText.text += (i + 1) + ". " + lBestTimes[i].ToString("F2") + "s\n";

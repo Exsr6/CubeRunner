@@ -67,9 +67,11 @@ public class PlayerController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        // raycast down to check if player is on ground or water
         bIsGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, isGround);
         bIsWater = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, isWater);
 
+        // Get movement x and y values
         MovementX = Input.GetAxisRaw("Horizontal");
         MovementY = Input.GetAxisRaw("Vertical");
 
@@ -77,6 +79,7 @@ public class PlayerController : MonoBehaviour {
         SpeedControl();
         StateHandler();
 
+        // Apply ground drag if walking or sprinting
         if (state == MovementState.walking || state == MovementState.sprinting) {
             rb.drag = groundDrag;
         }
@@ -86,20 +89,24 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void FixedUpdate() {
+        // Call functions on fixed updates
         MovePlayer();
         sParticles();
     }
 
     void PlayerInput() {
 
+        // Jump if conditions are met
         if (Input.GetKey(jumpKey) && readyToJump && (bIsGrounded || bIsWater)) {
             readyToJump = false;
 
+            // Call jump function
             Jump();
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
 
+        // reset scene on key press
         if (Input.GetKeyDown(KeyCode.R)) {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
@@ -139,15 +146,22 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void MovePlayer() {
+        // Calculate movement direction
         moveDirection = orientation.forward * MovementY + orientation.right * MovementX;
+        // make force vector based on direction and speed
         Vector3 force = moveDirection.normalized * movementSpeed * 10f;
 
         if (OnSlope()) {
+            // if on slope, use slope force
             force = GetSlopeMoveDirection() * movementSpeed * 20f;
-            if (rb.velocity.y > 0) rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+            // Apply own gravity when on slope
+            if (rb.velocity.y > 0) 
+                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
         }
 
+        // Apply force to player
         rb.AddForce(force, ForceMode.Force);
+        // Use gravity when not on slope
         rb.useGravity = !OnSlope();
     }
 
@@ -155,6 +169,7 @@ public class PlayerController : MonoBehaviour {
     private void SpeedControl() {
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
+        // Limit velocity if needed so they don't go faster than max speed
         if (flatVel.magnitude > movementSpeed) {
             Vector3 limitedVel = flatVel.normalized * movementSpeed;
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
@@ -162,16 +177,20 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void Jump() {
+        // Make it so the player doesnt keep upward momentum when jumping
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
+        // Add jump force
         rb.AddForce(transform.up * jumpforce, ForceMode.Impulse);
     }
 
     private void ResetJump() {
+        // Reset jump state
         readyToJump = true;
     }
 
     private void sParticles() {
+        // Enable particles when moving fast
         if (movementSpeed > 7) {
             speedParticles.Play();
         }
@@ -181,6 +200,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private bool OnSlope() {
+        // Handle slope physics and movement
         if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.1f)) {
             return Vector3.Angle(Vector3.up, slopeHit.normal) < maxSlopeAngle;
         }
@@ -188,6 +208,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private Vector3 GetSlopeMoveDirection() {
+        // Get angle of the slope
         return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
     }
 

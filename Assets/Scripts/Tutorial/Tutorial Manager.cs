@@ -8,13 +8,9 @@ public class TutorialManager : MonoBehaviour
     public TextMeshProUGUI tutorialText;
     public int stepIndex = 0;
 
-    void Start()
-    {
-        ShowStep();
-    }
-
     void Update()
     {
+        // Tutorial Steps
         switch (stepIndex) {
             case 0:
                 tutorialText.text = "Use WASD to move.";
@@ -65,10 +61,6 @@ public class TutorialManager : MonoBehaviour
                 tutorialText.text = "Well done you have completed the tutorial! Now walk into the green object to finish the level!";
                 break;
         }
-    }
-
-    void ShowStep() {
-
     }
 
     public void CompleteStep() {

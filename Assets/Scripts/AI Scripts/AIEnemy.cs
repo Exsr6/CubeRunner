@@ -26,6 +26,7 @@ public class EnemyAI : MonoBehaviour {
     private bool bIsJumping = false;
 
     void Start() {
+        // Get Components
         _agent = GetComponent<NavMeshAgent>();
         _rb = GetComponent<Rigidbody>();
 
@@ -38,13 +39,16 @@ public class EnemyAI : MonoBehaviour {
 
         fFireCooldown -= Time.deltaTime;
 
+        // Get distance to player
         float distanceToPlayer = Vector3.Distance(transform.position, _player.position);
 
+        // Check if player is within attack range
         if (distanceToPlayer < fAttackRange) {
             transform.LookAt(_player);
             _agent.isStopped = true;
             Shoot();
         }
+        // else player is outside attack range
         else {
             _agent.isStopped = false;
             RandomWalk();
@@ -64,6 +68,7 @@ public class EnemyAI : MonoBehaviour {
     }
 
     void RandomWalk() {
+        // Pick random location if not already moving
         if (!_agent.pathPending && _agent.remainingDistance < 0.5f) {
             fWaitCounter += Time.deltaTime;
             if (fWaitCounter >= fWaitTime) {
@@ -74,10 +79,12 @@ public class EnemyAI : MonoBehaviour {
     }
 
     void PickLocation() {
+        // Get a random point within the walk radius
         Vector3 randomDirection = Random.insideUnitSphere * fWalkRadius;
         randomDirection += transform.position;
         NavMeshHit hit;
 
+        // Check if the random point is on the NavMesh
         if (NavMesh.SamplePosition(randomDirection, out hit, fWalkRadius, NavMesh.AllAreas)) {
             _agent.SetDestination(hit.position);
         }
@@ -95,6 +102,7 @@ public class EnemyAI : MonoBehaviour {
         }
     }
 
+    // Handle jumping across gaps using navlinks
     IEnumerator JumpAcrossGap() {
         bIsJumping = true;
 

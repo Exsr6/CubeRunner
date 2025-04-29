@@ -18,14 +18,16 @@ public class TutorialPickup : MonoBehaviour
     }
 
     public void Update() {
+        // Rotate the pickup object
         transform.Rotate(new Vector3(15, 30, 45) * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other) {
-
+        // Check if the player collided with the pickup
         if (other.gameObject.CompareTag("Player")) {
             AbilitySystem.pickupAbility(ability);
             if (tm.stepIndex == 2) {
+                // complete the step if current step is 2
                 tm.CompleteStep();
             }
             Destroy(gameObject);

@@ -42,6 +42,7 @@ public class AbilityUI : MonoBehaviour {
 
     private Sprite GetAbilitySprite(AbilitySystem.AbilityType ability) {
         switch (ability) {
+            // Get Sprite based on the ability type
             case AbilitySystem.AbilityType.DoubleJump: return doubleJumpSprite;
             case AbilitySystem.AbilityType.Dash: return dashSprite;
             case AbilitySystem.AbilityType.Slide: return slideSprite;

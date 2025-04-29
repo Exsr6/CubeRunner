@@ -26,6 +26,7 @@ public class WeaponSystem : MonoBehaviour {
     }
 
     void Update() {
+        // call the shoot function when the player presses the fire button
         if (Input.GetButton("Fire1") && Time.time >= nextFireTime) {
             Shoot();
             // fire rate
@@ -39,6 +40,7 @@ public class WeaponSystem : MonoBehaviour {
             // Create the bullet
             GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
 
+            // play the fire sound
             FireSound.Play();
 
             // get the component
@@ -53,6 +55,7 @@ public class WeaponSystem : MonoBehaviour {
             // Destroy bullet after 5 seconds
             Destroy(bullet, 5f);
 
+            // Reduce ammo
             currentAmmo--;
             UpdateAmmoUI();
         }
